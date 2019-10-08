@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6" style="text-align:center;">
+      <h3>CRUD Operation in Angular with TypeScript</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <span (click)="addNewPost()" class="btn btn-primary btn-xs">Add New Curso</span>
+      <br /><br />
+      <div class="table-responsive">
+        <table id="mytable" class="table table-bordred table-striped">
+          <thead>
+            <th>Titulo</th>
+            <th>Profesor</th>
+            <th>Nivel</th>
+            <th>Horas</th>            
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cursoList">
+              <td>{{item.titulo}}</td>
+              <td>{{item.profesor}}</td>
+              <td>{{item.nivel}}</td>              
+              <td>{{item.horas}}</td> 
+              <td><span class="btn btn-primary btn-xs" (click)="dowloadcatalogo()">
+                  <span class="glyphicon glyphicon-pencil"></span></span></td>
+             
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
