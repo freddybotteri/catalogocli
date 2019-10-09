@@ -10,8 +10,8 @@
 
         <div class="form-group">
           <label class="col-sm-2 control-label">Activo</label>
-          <div class="col-sm-10">
-            <input type="radio" [value]=1 class="form-control" formControlName="sts" />
+          <div class="col-sm-2">
+            <input type="checkbox" class="form-control-sm" formControlName="sts" />
           </div>
         </div>
 
@@ -20,7 +20,14 @@
           <div class="col-sm-10">
             <select class="form-control" formControlName="profesor">
               <option value="null" disabled>Seleccionar...</option>
-              <option value="JoseMartines">Jose Martinez</option>
+              <option value="Jose Martines">Jose Martinez</option>
+              <option value="Ana Lopez">Ana Lopez</option>
+              <option value="Lu Smith">Lu Smith</option>
+              <option value="Karl John">Karl John</option>
+              <option value="Sergio Restrepo">Sergio Restrepo</option>
+              <option value="Marta Matamoros">Marta Matamoros</option>
+              <option value="Clara Bernabeu">Clara Bernabeu</option>
+              <option value="Mario Perez">Mario Perez</option>
             </select>
           </div>
         </div>
@@ -37,18 +44,22 @@
           <div class="col-sm-10">
             <select class="form-control" formControlName="nivel">
               <option Value="null" disabled>Seleccionar...</option>
-              <option Value="basico">Basico</option>
+              <option Value="Basico">Basico</option>
+              <option Value="Intermedio">Intermedio</option>
+              <option Value="Avanzado">Avanzado</option>
             </select>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group ">
           <label class="col-sm-2 control-label">Duracion en horas</label>
           <div class="col-sm-10">
-            <input type="number" class="form-control" formControlName="horas" />
+            <input type="number" min="0" class="form-control" formControlName="horas" />
           </div>
         </div>
-
+        <div class="form-group ">
+        	<ngx-fileupload [url]="'http://localhost:9095/rest/files/upload'"></ngx-fileupload>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onClose()">Close</button>

@@ -52,7 +52,7 @@ export class NewCursoComponent implements OnInit {
   
     this.cursoService.addCurso(postData).subscribe(data=>{
       console.log(data);
-      if(data!=null && data>0){
+      if(data!=null){
         this.event.emit('OK');
         this.bsModalRef.hide();
       }
