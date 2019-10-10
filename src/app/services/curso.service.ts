@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject,Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +29,13 @@ export class CursoService {
         header.append('Content-Type', 'applications/json');
         return this.http.post(this.baseURL + "course", curso, { headers: header})
     }
+
+    getPDF(filename:string){   
+		//const options = { responseType: 'blob' }; there is no use of this
+		let header = new HttpHeaders();
+        header.append('Content-Type', 'applications/pdf');
+		let uri = this.baseURL+"pdf/get/" + filename;
+		// this.http refers to HttpClient. Note here that you cannot use the generic get<Blob> as it does not compile: instead you "choose" the appropriate API in this way.
+		return this.http.get(uri, { responseType: 'blob' });
+	}
 }

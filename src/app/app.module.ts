@@ -16,6 +16,7 @@ import { NewCursoComponent } from './component/new-curso/new-curso.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { OrderModule } from 'ngx-order-pipe';
 import { NgxFileUploadModule } from "@r-hannuschka/ngx-fileupload";
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgxFileUploadModule } from "@r-hannuschka/ngx-fileupload";
     ModalModule.forRoot(),
     NgxPaginationModule,
     OrderModule,
-    NgxFileUploadModule
+    NgxFileUploadModule,
+    FileUploadModule
   ],
   providers: [CursoService],
   bootstrap: [AppComponent],
