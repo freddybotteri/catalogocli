@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CursoService } from 'src/app/services/curso.service';
+import { ProfesorService } from 'src/app/services/profesor.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 import { FileUploader ,FileItem,ParsedResponseHeaders} from 'ng2-file-upload';
@@ -17,6 +18,8 @@ export class NewCursoComponent implements OnInit {
   event: EventEmitter<any>=new EventEmitter();
   uploader: FileUploader = new FileUploader({ url: "http://localhost:9095/rest/files/upload", removeAfterUpload: false, autoUpload: true});
   dirtemario: String;
+
+  profesorList: any[] = [];
   /**
   	cur_nid
     cur_vtitulo
@@ -28,6 +31,7 @@ export class NewCursoComponent implements OnInit {
    */
   constructor(private builder: FormBuilder,
    			private cursoService: CursoService,
+   			private profesorService: ProfesorService,
     		private bsModalRef: BsModalRef) { 
 
   		this.addNewCursoForm = this.builder.group({
@@ -39,15 +43,23 @@ export class NewCursoComponent implements OnInit {
 	      catalogo: new FormControl('', [])
 	    });
 
-	    	this.uploader.onBeforeUploadItem = (item) => {
-			  item.withCredentials = false;
-			}
+    	this.uploader.onBeforeUploadItem = (item) => {
+		  item.withCredentials = false;
+		}
+
+		
+
 
 
   }
 
   ngOnInit() {
-
+  	this.profesorService.getProfesoresList().subscribe(data => {
+      Object.assign(this.profesorList, data);
+    }, error => {
+      console.log("Error...", error);
+    });
+  	
   	this.uploader.onErrorItem = (item, response, status, headers) => this.onErrorItem(item, response, status, headers);
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
   }

@@ -1,12 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 col-lg-12 col-xs-12 " style="text-align:center;">
-      <h3>CRUD Operation in Angular with TypeScript</h3>
+      <h3>Catálogo de cursos</h3>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12 col-lg-12 col-xs-12">
-      <span (click)="addNewPost()" class="btn btn-primary btn-xs">Add New Curso</span>
+      
       <br /><br />
       <div class="table-responsive">
         <table id="mytable" class="table table-bordred table-striped">
@@ -20,7 +20,7 @@
           <tbody>
             <tr *ngFor="let item of cursoList | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 5, currentPage: p }">
               <td>{{item.titulo}}</td>
-              <td>{{item.profesor}}</td>
+              <td>{{item.fullname}}</td>
               <td>{{item.nivel}}</td>              
               <td>{{item.numerohoras}}</td> 
               <td><span class="btn btn-primary btn-xs" (click)="showPDF(item.catalogo)">
@@ -29,8 +29,14 @@
             </tr>
           </tbody>
         </table>
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
-
+        	<div class="row">
+    			<div class="col-md-4 col-lg-4 col-xs-6">
+        			<pagination-controls (pageChange)="p = $event"></pagination-controls>
+        		</div>
+        		<div class="col-md-4 col-lg-4 col-xs-6">
+       				<span (click)="addNewPost()" class="btn btn-primary btn-xs">Nuevo curso</span>
+       			</div>
+       		</div>
       </div>
     </div>
   </div>

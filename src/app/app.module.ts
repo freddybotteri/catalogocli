@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { CursoComponent } from './component/curso/curso.component';
 
 import { CursoService } from './services/curso.service';
+import { ProfesorService } from './services/profesor.service';
+
 import { NewCursoComponent } from './component/new-curso/new-curso.component';
 
 
@@ -36,7 +38,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     NgxFileUploadModule,
     FileUploadModule
   ],
-  providers: [CursoService],
+  providers: [CursoService,ProfesorService],
   bootstrap: [AppComponent],
   entryComponents:[NewCursoComponent]
 })

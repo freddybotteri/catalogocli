@@ -24,11 +24,13 @@ export class CursoService {
         return this.http.get(this.baseURL + "course", { headers: header})
     }
 
-     addCurso(curso: any){
+    addCurso(curso: any){
         let header = new HttpHeaders();
         header.append('Content-Type', 'applications/json');
         return this.http.post(this.baseURL + "course", curso, { headers: header})
     }
+
+
 
     getPDF(filename:string){   
 		//const options = { responseType: 'blob' }; there is no use of this
