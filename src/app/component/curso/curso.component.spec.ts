@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CursoComponent } from './curso.component';
+import { OrderPipe } from 'ngx-order-pipe';
 
 describe('CursoComponent', () => {
   let component: CursoComponent;
@@ -8,7 +9,8 @@ describe('CursoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CursoComponent ]
+      declarations: [ CursoComponent ],
+      imports: [OrderPipe]
     })
     .compileComponents();
   }));

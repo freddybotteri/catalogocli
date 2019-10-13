@@ -40,6 +40,7 @@ export class CursoComponent implements OnInit {
     this.cursoService.getCursoList().subscribe(data => {
       Object.assign(this.cursoList, data);
     }, error => {
+    	alert("Error al cargar lista de cursos, intente de nuevo.");
       console.log("Error while getting posts ", error);
     });
   }
@@ -49,6 +50,8 @@ export class CursoComponent implements OnInit {
     this.bsModalRef.content.event.subscribe(result => {
       if (result == 'OK') {
         this.getPosts();
+      }else{
+      	alert("Error al agregar.");
       }
     });
   }

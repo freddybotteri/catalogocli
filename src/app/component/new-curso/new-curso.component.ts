@@ -73,7 +73,7 @@ export class NewCursoComponent implements OnInit {
 
     onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
         let error = response; //error server response
-        alert("Archivo invalido.");
+        alert("Archivo invalido solo PDF.");
     }
 
     onPostFormSubmit(){
@@ -91,6 +91,8 @@ export class NewCursoComponent implements OnInit {
       if(data!=null){
         this.event.emit('OK');
         this.bsModalRef.hide();
+      }else{
+      	this.event.emit('ERROR');
       }
     });
   }
