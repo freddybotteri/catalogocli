@@ -19,7 +19,7 @@ export class CursoComponent implements OnInit {
   order: string = 'titulo';
   reverse: boolean = false;
   sortedCollection: any[];
-
+  p:any;
   constructor(private orderPipe: OrderPipe,private cursoService: CursoService, private bsModalService: BsModalService) {
   	this.sortedCollection = orderPipe.transform(this.cursoList, 'titulo');
    }
