@@ -14,20 +14,20 @@ export class CursoService {
 
   constructor(private http: HttpClient) {
 
-  		this.baseURL ="http://localhost:9095/rest/";
+  		this.baseURL ="http://localhost:9095/courses";
         this.postIdData= this.postIdSource.asObservable();
          }
 
-    getCursoList(){
+    getCursoList(pageCourseCounter:number){
         let header = new HttpHeaders();
         header.append('Content-Type', 'applications/json');
-        return this.http.get(this.baseURL + "course", { headers: header})
+        return this.http.get(this.baseURL + "?page="+pageCourseCounter+"&size=10", { headers: header})
     }
 
     addCurso(curso: any){
         let header = new HttpHeaders();
         header.append('Content-Type', 'applications/json');
-        return this.http.post(this.baseURL + "course", curso, { headers: header})
+        return this.http.post(this.baseURL + "", curso, { headers: header})
     }
 
 

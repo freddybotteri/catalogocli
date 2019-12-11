@@ -14,13 +14,19 @@ export class ProfesorService {
 
   constructor(private http: HttpClient) {
 
-  		this.baseURL ="http://localhost:9095/rest/";
+  		this.baseURL ="http://localhost:9095/";
         this.postIdData= this.postIdSource.asObservable();
          }
 
     getProfesoresList(){
         let header = new HttpHeaders();
         header.append('Content-Type', 'applications/json');
-        return this.http.get(this.baseURL + "profesor", { headers: header})
+        return this.http.get(this.baseURL + "teachers", { headers: header})
     }    
+
+    addTeacher(teacherData:any){
+        let header = new HttpHeaders();
+        header.append('Content-Type', 'applications/json');
+        return this.http.post(this.baseURL + "/add", teacherData, { headers: header})
+    }  
 }

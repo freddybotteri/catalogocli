@@ -4,7 +4,12 @@ import { CursoService } from 'src/app/services/curso.service';
 import { ProfesorService } from 'src/app/services/profesor.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
+import { map ,catchError} from 'rxjs/operators';
+import { throwError} from 'rxjs';
+
 import { FileUploader ,FileItem,ParsedResponseHeaders} from 'ng2-file-upload';
+
+import { Teacher } from 'src/app/models/Teacher';
 
 @Component({
   selector: 'app-new-curso',
@@ -18,6 +23,8 @@ export class NewCursoComponent implements OnInit {
   event: EventEmitter<any>=new EventEmitter();
   uploader: FileUploader = new FileUploader({ url: "http://localhost:9095/rest/files/upload", removeAfterUpload: false, autoUpload: true});
   dirtemario: String;
+
+
 
   profesorList: any[] = [];
   /**
@@ -35,30 +42,32 @@ export class NewCursoComponent implements OnInit {
     		private bsModalRef: BsModalRef) { 
 
   		this.addNewCursoForm = this.builder.group({
-	      titulo: new FormControl(null, []),
-	      sts: new FormControl('', []),
-	      nivel: new FormControl('', []),
-	      horas: new FormControl('', []),
-	      profesor: new FormControl('', []),
-	      catalogo: new FormControl('', [])
+	      title: new FormControl(null, []),
+	      active: new FormControl('', []),
+	      level: new FormControl('', []),
+	      hours: new FormControl('', []),
+	      teacher: new FormControl('', [])
 	    });
 
     	this.uploader.onBeforeUploadItem = (item) => {
 		  item.withCredentials = false;
 		}
 
-		
-
-
-
   }
 
   ngOnInit() {
-  	this.profesorService.getProfesoresList().subscribe(data => {
-      Object.assign(this.profesorList, data);
-    }, error => {
-      console.log("Error...", error);
-    });
+  	this.profesorService.getProfesoresList().pipe(
+      map(data => {
+
+        let setTeacher = new Set(...this.profesorList, data);
+        this.profesorList = Array.from(setTeacher);
+        console.log(this.profesorList)
+      }),
+      catchError(err => {
+        alert('Error in list of teacher.');
+        return throwError(err);
+      })
+    ).toPromise();
   	
   	this.uploader.onErrorItem = (item, response, status, headers) => this.onErrorItem(item, response, status, headers);
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
@@ -78,14 +87,14 @@ export class NewCursoComponent implements OnInit {
 
     onPostFormSubmit(){
     let postData = {
-      'titulo': this.addNewCursoForm.get('titulo').value,
-      'state': this.addNewCursoForm.get('sts').value,
-      'nivel': this.addNewCursoForm.get('nivel').value,
-      'numerohoras': this.addNewCursoForm.get('horas').value,
-      'profesor': this.addNewCursoForm.get('profesor').value,
-      'catalogo': this.dirtemario,
+      'title': this.addNewCursoForm.get('title').value,
+      'active': this.addNewCursoForm.get('active').value,
+      'level': this.addNewCursoForm.get('level').value,
+      'hours': this.addNewCursoForm.get('hours').value,
+      'teacher': new Teacher(this.addNewCursoForm.get('teacher').value,""),
     };
-  
+    
+    console.log(postData)
     this.cursoService.addCurso(postData).subscribe(data=>{
       console.log(data);
       if(data!=null){

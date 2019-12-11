@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,HostListener} from '@angular/core';
 
 import { CursoService } from '../../services/curso.service';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 import { NewCursoComponent } from '../../component/new-curso/new-curso.component';
+import { NewTeacherComponent } from '../../component/new-teacher/new-teacher.component';
 import { OrderPipe } from 'ngx-order-pipe';
+import { map ,mergeMap,catchError} from 'rxjs/operators';
+import { throwError} from 'rxjs';
 
 @Component({
   selector: 'app-curso',
@@ -14,7 +17,13 @@ import { OrderPipe } from 'ngx-order-pipe';
 export class CursoComponent implements OnInit {
 
   cursoList: any[] = [];
+  courseInfinite:any[] = [];
+
+  pageCourseCounter:number = 1;
+
   bsModalRef: BsModalRef;
+
+  bsModalTeacherRef: BsModalRef;
 
   order: string = 'titulo';
   reverse: boolean = false;
@@ -25,6 +34,7 @@ export class CursoComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.pageCourseCounter = 0;
   	this.getPosts();
   }
 
@@ -37,13 +47,45 @@ export class CursoComponent implements OnInit {
   }
 
   getPosts() {
-    this.cursoService.getCursoList().subscribe(data => {
-      Object.assign(this.cursoList, data);
-    }, error => {
-    	alert("Error al cargar lista de cursos, intente de nuevo.");
-      console.log("Error while getting posts ", error);
-    });
+    this.cursoService.getCursoList(this.pageCourseCounter).pipe(
+      map(data => {
+
+
+        if(!data["empty"]){
+            this.courseInfinite = Array.of(...data["content"],...this.courseInfinite);
+            console.log(this.courseInfinite)
+            this.pageCourseCounter++;
+        }
+       
+      }),
+      catchError(err => {
+        alert('Error in list of course.');
+        return throwError(err);
+      })
+    ).toPromise();
   }
+
+
+  
+
+  @HostListener("window:scroll", ["$event"])
+  onWindowScroll(event) {
+    console.log(event)
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+      //calert("you're at the bottom of the page");
+      this.getPosts();
+    }
+  }
+
+  @HostListener('fullscreenchange', ['$event'])
+  @HostListener('webkitfullscreenchange', ['$event'])
+  @HostListener('mozfullscreenchange', ['$event'])
+  @HostListener('MSFullscreenChange', ['$event'])
+  screenChange(event) {
+    console.log(event);
+  }
+
+  
 
   addNewPost() {
     this.bsModalRef = this.bsModalService.show(NewCursoComponent);
@@ -52,6 +94,18 @@ export class CursoComponent implements OnInit {
         this.getPosts();
       }else{
       	alert("Error al agregar.");
+      }
+    });
+  }
+
+
+  addNewTeacher() {
+    this.bsModalTeacherRef = this.bsModalService.show(NewTeacherComponent);
+    this.bsModalTeacherRef.content.event.subscribe(result => {
+      if (result == 'OK') {
+        this.getPosts();
+      }else{
+        alert("Error al agregar.");
       }
     });
   }

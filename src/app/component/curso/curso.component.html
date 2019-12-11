@@ -6,37 +6,41 @@
   </div>
   <div class="row">
     <div class="col-md-12 col-lg-12 col-xs-12">
-      
+      <div class="row">
+          
+          <div class="col-md-1 col-lg-1 col-xs-6">
+              <span (click)="addNewPost()" class="btn btn-primary btn-xs">Nuevo curso</span>
+          </div>
+          <div class="col-md-1 col-lg-1 col-xs-6">
+              <span (click)="addNewTeacher()" class="btn btn-primary btn-xs">Nuevo teacher</span>
+          </div>
+          </div>
       <br /><br />
       <div class="table-responsive">
-        <table id="mytable" class="table table-bordred table-striped">
+        <table id="mytable" class="table table-bordred table-striped table-lg"cellspacing="0"
+  width="100%">
           <thead>
             <th (click)="setOrder('titulo')">Titulo <span style="float: right;" class="glyphicon glyphicon-sort"></span></th>
             <th>Profesor</th>
             <th>Nivel</th>
             <th>Horas</th>
-            <th>Temario</th>            
+            <th>-----</th>            
           </thead>
           <tbody>
-            <tr *ngFor="let item of cursoList | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 5, currentPage: p }">
-              <td>{{item.titulo}}</td>
-              <td>{{item.fullname}}</td>
-              <td>{{item.nivel}}</td>              
-              <td>{{item.numerohoras}}</td> 
-              <td><span class="btn btn-primary btn-xs" (click)="showPDF(item.catalogo)">
-                  <span class="glyphicon glyphicon-download"></span></span></td>
+            <tr *ngFor="let item of courseInfinite ">
+              <td>{{item.title}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.level}}</td>              
+              <td>{{item.hours}}</td> 
+              <td><span class="btn btn-danger btn-xs" (click)="delete(item.id)">
+                  <span class="glyphicon glyphicon-trash"></span></span></td>
+              <td><span class="btn btn-warning btn-xs" (click)="edit(item)">
+                  <span class="glyphicon glyphicon-pencil"></span></span></td>
              
             </tr>
           </tbody>
         </table>
-        	<div class="row">
-    			<div class="col-md-4 col-lg-4 col-xs-6">
-        			<pagination-controls (pageChange)="p = $event"></pagination-controls>
-        		</div>
-        		<div class="col-md-4 col-lg-4 col-xs-6">
-       				<span (click)="addNewPost()" class="btn btn-primary btn-xs">Nuevo curso</span>
-       			</div>
-       		</div>
+        	
       </div>
     </div>
   </div>

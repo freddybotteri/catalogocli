@@ -14,6 +14,8 @@ import { ProfesorService } from './services/profesor.service';
 
 import { NewCursoComponent } from './component/new-curso/new-curso.component';
 
+import { NewTeacherComponent } from './component/new-teacher/new-teacher.component';
+
 
 import {NgxPaginationModule} from 'ngx-pagination';
 import { OrderModule } from 'ngx-order-pipe';
@@ -24,7 +26,8 @@ import { FileUploadModule } from 'ng2-file-upload';
   declarations: [
     AppComponent,
     CursoComponent,
-    NewCursoComponent
+    NewCursoComponent,
+    NewTeacherComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,6 @@ import { FileUploadModule } from 'ng2-file-upload';
   ],
   providers: [CursoService,ProfesorService],
   bootstrap: [AppComponent],
-  entryComponents:[NewCursoComponent]
+  entryComponents:[NewCursoComponent,NewTeacherComponent]
 })
 export class AppModule { }
