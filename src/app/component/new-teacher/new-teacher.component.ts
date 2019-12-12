@@ -26,7 +26,7 @@ export class NewTeacherComponent implements OnInit {
   dirtemario: String;
 
   
-
+  
   profesorList: any[] = [];
   /**
   	cur_nid
@@ -48,7 +48,7 @@ export class NewTeacherComponent implements OnInit {
   }
 
   ngOnInit() {
-  
+    
   }
 
 

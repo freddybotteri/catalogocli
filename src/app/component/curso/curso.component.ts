@@ -3,11 +3,15 @@ import { Component, OnInit ,HostListener} from '@angular/core';
 import { CursoService } from '../../services/curso.service';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
+
 import { NewCursoComponent } from '../../component/new-curso/new-curso.component';
 import { NewTeacherComponent } from '../../component/new-teacher/new-teacher.component';
 import { OrderPipe } from 'ngx-order-pipe';
-import { map ,mergeMap,catchError} from 'rxjs/operators';
+import { map ,mergeMap,catchError,retry} from 'rxjs/operators';
 import { throwError} from 'rxjs';
+
+
+
 
 @Component({
   selector: 'app-curso',
@@ -52,7 +56,7 @@ export class CursoComponent implements OnInit {
 
 
         if(!data["empty"]){
-            this.courseInfinite = Array.of(...data["content"],...this.courseInfinite);
+            this.courseInfinite = Array.of(...this.courseInfinite,...data["content"]);
             console.log(this.courseInfinite)
             this.pageCourseCounter++;
         }
@@ -109,6 +113,48 @@ export class CursoComponent implements OnInit {
       }
     });
   }
+
+
+  editCourse(datacourse:any){
+    this.bsModalRef = this.bsModalService.show(NewCursoComponent,{
+      initialState: {
+          dataCourseTowillUpdate:[{
+          'id':datacourse.id,
+          'title': datacourse.title,
+          'active': datacourse.active,
+          'level': datacourse.level,
+          'hours': datacourse.hours,
+          'teacher': datacourse.teacher.id
+            
+          }]
+       }
+    });
+    this.bsModalRef.content.event.subscribe(result => {
+      if (result == 'OK') {
+        this.getPosts();
+      }else{
+        alert("Error al agregar.");
+      }
+    });
+  }
+
+  deleteCourse(id){
+
+    var r = confirm("¿Desa eliminar el curso?");
+    if (r == true) {
+      this.cursoService.deleteCourse(id).pipe(
+        retry(1),
+        catchError(err => {
+          alert('Error in delete course.');
+          return throwError(err);
+        })
+      ).toPromise();
+    } else {
+      
+    }
+    
+  }
+
 
   dowloadcatalogo(){
 

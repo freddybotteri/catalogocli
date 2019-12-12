@@ -30,6 +30,18 @@ export class CursoService {
         return this.http.post(this.baseURL + "", curso, { headers: header})
     }
 
+    updateCurso(curso: any){
+        let header = new HttpHeaders();
+        header.append('Content-Type', 'applications/json');
+        return this.http.put(this.baseURL + "/Update", curso, { headers: header})
+    }
+
+    deleteCourse(id){
+      let header = new HttpHeaders();
+      header.append('Content-Type', 'applications/json');
+      return this.http.delete(this.baseURL + "/delete/"+id, { headers: header})
+    }
+
 
 
     getPDF(filename:string){   

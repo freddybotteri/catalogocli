@@ -25,40 +25,41 @@ export class NewCursoComponent implements OnInit {
   dirtemario: String;
 
 
+  dataCourseTowillUpdate: any[]=[];
+
 
   profesorList: any[] = [];
-  /**
-  	cur_nid
-    cur_vtitulo
-    cur_nsts
-    cur_vnivel
-    cur_vhoras
-    cur_vprofesor
-    cur_fcatalogo
-   */
+
   constructor(private builder: FormBuilder,
-   			private cursoService: CursoService,
-   			private profesorService: ProfesorService,
-    		private bsModalRef: BsModalRef) { 
+		private cursoService: CursoService,
+		private profesorService: ProfesorService,
+		private bsModalRef: BsModalRef) { 
 
-  		this.addNewCursoForm = this.builder.group({
-	      title: new FormControl(null, []),
-	      active: new FormControl('', []),
-	      level: new FormControl('', []),
-	      hours: new FormControl('', []),
-	      teacher: new FormControl('', [])
-	    });
+    this.addNewCursoForm = this.builder.group({
+      id:0,
+      title: new FormControl(null, []),
+      active: new FormControl('', []),
+      level: new FormControl('', []),
+      hours: new FormControl('', []),
+      teacher: new FormControl('', [])
+    });
 
-    	this.uploader.onBeforeUploadItem = (item) => {
-		  item.withCredentials = false;
-		}
-
+  	this.uploader.onBeforeUploadItem = (item) => {
+	    item.withCredentials = false;
+	  }
   }
 
   ngOnInit() {
+
+    if(this.dataCourseTowillUpdate.length > 0){
+      this.addNewCursoForm.setValue(
+        this.dataCourseTowillUpdate[0]
+
+      );
+    }
+
   	this.profesorService.getProfesoresList().pipe(
       map(data => {
-
         let setTeacher = new Set(...this.profesorList, data);
         this.profesorList = Array.from(setTeacher);
         console.log(this.profesorList)
@@ -73,19 +74,27 @@ export class NewCursoComponent implements OnInit {
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
   }
 
-    onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-        let data = response; //success server response
-        this.dirtemario = data;
-        console.log(data);
+  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+      let data = response; //success server response
+      this.dirtemario = data;
+      console.log(data);
 
+  }
+
+  onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+      let error = response; //error server response
+      alert("Archivo invalido solo PDF.");
+  }
+
+  onSubmit(){
+    if(this.dataCourseTowillUpdate.length > 0 ){
+      this.onEditFormSubmit();
+    }else{
+      this.onPostFormSubmit();
     }
+  }
 
-    onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-        let error = response; //error server response
-        alert("Archivo invalido solo PDF.");
-    }
-
-    onPostFormSubmit(){
+  onPostFormSubmit(){
     let postData = {
       'title': this.addNewCursoForm.get('title').value,
       'active': this.addNewCursoForm.get('active').value,
@@ -93,7 +102,7 @@ export class NewCursoComponent implements OnInit {
       'hours': this.addNewCursoForm.get('hours').value,
       'teacher': new Teacher(this.addNewCursoForm.get('teacher').value,""),
     };
-    
+  
     console.log(postData)
     this.cursoService.addCurso(postData).subscribe(data=>{
       console.log(data);
@@ -102,6 +111,28 @@ export class NewCursoComponent implements OnInit {
         this.bsModalRef.hide();
       }else{
       	this.event.emit('ERROR');
+      }
+    });
+  }
+
+  onEditFormSubmit(){  
+
+    let putData = {
+      'id':this.addNewCursoForm.get('id').value,
+      'title': this.addNewCursoForm.get('title').value,
+      'active': this.addNewCursoForm.get('active').value,
+      'level': this.addNewCursoForm.get('level').value,
+      'hours': this.addNewCursoForm.get('hours').value,
+      'teacher': new Teacher(this.addNewCursoForm.get('teacher').value,""),
+    };
+    console.log(putData);
+    this.cursoService.updateCurso(putData).subscribe(data=>{
+      console.log(data);
+      if(data!=null){
+        this.event.emit('OK');
+        this.bsModalRef.hide();
+      }else{
+        this.event.emit('ERROR');
       }
     });
   }
