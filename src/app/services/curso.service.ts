@@ -18,10 +18,10 @@ export class CursoService {
         this.postIdData= this.postIdSource.asObservable();
          }
 
-    getCursoList(pageCourseCounter:number){
+    getCursoList(pageCourseCounter:number,pageOrderCoursesName:string){
         let header = new HttpHeaders();
         header.append('Content-Type', 'applications/json');
-        return this.http.get(this.baseURL + "?page="+pageCourseCounter+"&size=10", { headers: header})
+        return this.http.get(this.baseURL + "?page="+pageCourseCounter+"&size=10&sort=title,"+pageOrderCoursesName, { headers: header})
     }
 
     addCurso(curso: any){

@@ -23,7 +23,8 @@ export class CursoComponent implements OnInit {
   cursoList: any[] = [];
   courseInfinite:any[] = [];
 
-  pageCourseCounter:number = 1;
+  pageCourseCounter:number = 0;
+  pageOrderCoursesName:string = 'asc';
 
   bsModalRef: BsModalRef;
 
@@ -42,16 +43,17 @@ export class CursoComponent implements OnInit {
   	this.getPosts();
   }
 
-  setOrder(value: string) {
-    if (this.order === value) {
-      this.reverse = !this.reverse;
+  setOrder() {
+    if (this.pageOrderCoursesName == 'desc') {
+      this.pageOrderCoursesName = 'asc';
+    }else{
+      this.pageOrderCoursesName = 'desc'
     }
-
-    this.order = value;
+    this.getCoursesOrderTitle();
   }
 
   getPosts() {
-    this.cursoService.getCursoList(this.pageCourseCounter).pipe(
+    this.cursoService.getCursoList(this.pageCourseCounter,this.pageOrderCoursesName).pipe(
       map(data => {
 
 
@@ -68,6 +70,30 @@ export class CursoComponent implements OnInit {
       })
     ).toPromise();
   }
+
+  getCoursesOrderTitle(){
+    this.cursoService.getCursoList(0,this.pageOrderCoursesName).pipe(
+      map(data => {
+
+        
+        if(!data["empty"]){
+          this.courseInfinite = [];
+          console.log(data["content"]);
+            this.courseInfinite = data["content"];
+            
+            this.pageCourseCounter++;
+        }
+        //console.log(this.courseInfinite);
+       
+      }),
+      catchError(err => {
+        alert('Error in list of course.');
+        return throwError(err);
+      })
+    ).toPromise();
+  }
+
+
 
 
   
